@@ -34,6 +34,26 @@ class Product {
     return `$${formatCurrency(this.priceCents)}`;
   }
 
+  extraInfoHTML() {
+    return '';
+  }
+}
+
+class Clothing extends Product {
+  sizeChartLink;
+
+  constructor(productDetails) {
+    super(productDetails); //calls the parent class constructor
+    this.sizeChartLink = productDetails.sizeChartLink;
+  }
+
+  extraInfoHTML() {
+    //super.extraInfoHTML(); used to call the parent methods
+    return `
+    <a href="${this.sizeChartLink}" target="_blank">
+      Size Chart
+    </a>`;
+  }
 }
 
 export const products = [
@@ -80,7 +100,7 @@ export const products = [
       "apparel",
       "mens"
     ],
-    type: "clothing",
+    type: "clothing", //discriminator property, tells which class we should convert this
     sizeChartLink: "images/clothing-size-chart.png"
   },
   {
@@ -696,5 +716,8 @@ export const products = [
     ]
   }
 ].map((productDetails) => {
+  if(productDetails.type === 'clothing') {
+    return new Clothing(productDetails);
+  }
   return new Product(productDetails);
 });
